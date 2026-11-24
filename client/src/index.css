@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #faf9f7;
+  --color-text-primary: #2f2e2e;
+  --color-text-muted: #605e5e;
+  --color-accent: #8c6d5a;
+  --font-heading: 'Jost', sans-serif;
+  --font-body: 'Jost', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-weight: 300;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 300;
+}

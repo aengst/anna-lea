@@ -1,0 +1,14 @@
+- Kommunicera alltid på **Svenska**.
+- Jag ska bygga en ny version av anna-lea.com.
+- Den ska ha samma känsla som den befintliga vad gäller färg och form.
+- Den ska ha en del  som visar upp Anna-Leas smycken och en del som är avsedd för Anna-Leas konst.
+- Det ska vara enkelt att lägga, till förändra och ta bort innehåll för administratören i ett admingränssnitt.
+- Den ska till att börja med driftas på min zbook server men ska vara enkel att flytta till  molntjänster.
+- Vi ska först ta fram en plan på  hur och med vilka tekniker vi ska bygga anna-lea.com.
+- Finns det något från mina befintliga appar som går att återanvända så gör vi det. Tex databasen och tunnelhantering. Men även teknikstack.
+- Var proaktiv och hjälp till att förbättra koden, men fråga innan stora förändringar.
+- Håll lösningar enkla och robusta.
+- Var medveten om prestanda och optimera där det behövs.
+- Om jag ställer en fråga så vill jag ha ett svar inte att du gör något.
+- Berätta alltid vad du tänker göra innan något görs så jag kan kommentera och ändra vid behov. 
+

@@ -1,0 +1,22 @@
+{
+  "name": "anna-lea",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Nya anna-lea.com – Smycken & Konst av Anna-Lea Öquist",
+  "scripts": {
+    "install:all": "npm.cmd install && npm.cmd install --prefix client && npm.cmd install --prefix server",
+    "dev": "npm.cmd run dev --prefix client",
+    "server": "npm.cmd run dev --prefix server",
+    "dev:all": "concurrently -n API,WEB -c cyan,magenta \"npm.cmd run server\" \"npm.cmd run dev\"",
+    "build": "npm.cmd run build --prefix client",
+    "start": "npm.cmd start --prefix server",
+    "db:init": "node server/db/init.js",
+    "import:archive": "node server/db/importArchive.js",
+    "release": "node scripts/release.js",
+    "tunnel": "cloudflared tunnel --config cloudflared-config.yml run"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

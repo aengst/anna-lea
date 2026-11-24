@@ -1,0 +1,63 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    container_name: anna-lea
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://${DB_USER:-annalea_user}:${DB_PASSWORD}@db:5432/${DB_NAME:-annalea_prod}
+      - FRONTEND_URL=${FRONTEND_URL:-https://anna-lea.com}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - AUTH_REDIRECT_URI=${AUTH_REDIRECT_URI:-https://anna-lea.com/api/auth/callback}
+      - JWT_SECRET=${JWT_SECRET}
+      - INITIAL_ADMIN_EMAIL=${INITIAL_ADMIN_EMAIL}
+      - UPLOAD_PATH=/app/uploads
+    volumes:
+      - ${HOST_UPLOADS_DIR:-/home/anders/srv/anna-lea/uploads}:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - anna-lea-net
+
+  db:
+    image: postgres:15-alpine
+    container_name: anna-lea-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-annalea_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-annalea_prod}
+    ports:
+      - "5440:5432"
+    volumes:
+      - ${HOST_DB_DIR:-/home/anders/srv/anna-lea/db}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-annalea_user} -d ${DB_NAME:-annalea_prod}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - anna-lea-net
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: anna-lea-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - anna-lea-net
+
+networks:
+  anna-lea-net:
+    driver: bridge
