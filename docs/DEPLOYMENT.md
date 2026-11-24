@@ -20,53 +20,54 @@ mkdir -p /home/anders/srv/anna-lea/uploads
 I ditt Google Cloud-projekt (*APIs & Services → Credentials → OAuth 2.0 Client ID*):
 
 1. Lägg till följande under **Authorized redirect URIs**:
-   - `https://mina-loggar.anna-lea.se/api/auth/callback`
-   - *(Inför framtida skarp lansering kan du redan nu eller senare lägga till: `https://anna-lea.com/api/auth/callback` och `https://www.anna-lea.com/api/auth/callback`)*
-   - *(För lokal dev-tunnel om du sätter upp en sådan: `https://anna-lea-dev.minaloggar.se/api/auth/callback`)*
+   - `https://anna-lea.minaloggar.se/api/auth/callback`
+   - *(Inför framtida skarp lansering: `https://anna-lea.com/api/auth/callback` och `https://www.anna-lea.com/api/auth/callback`)*
+   - *(För lokal dev: `http://localhost:5176/api/auth/callback`)*
 2. Kopiera **Client ID** och **Client Secret**.
 
 ---
 
-## 3. Cloudflare Tunnel
+## 3. Cloudflare Tunnel (`zbook_server`)
 
-1. Skapa en ny tunnel i **Cloudflare Zero Trust → Networks → Tunnels** (t.ex. `anna-lea`) och kopiera dess `TUNNEL_TOKEN`.
-2. Lägg till en **Public Hostname** i tunneln:
-   - **Subdomain / Domain:** `mina-loggar.anna-lea.se`
-   - **Service Type:** `HTTP`
-   - **URL:** `anna-lea:3004` *(containernamnet i Docker-nätverket `anna-lea-net`)*
+Återanvänder den befintliga gemensamma tunneln **`zbook_server`** i Cloudflare Zero Trust:
+- **Subdomain / Domain:** `anna-lea.minaloggar.se`
+- **Service URL:** `http://192.168.0.121:3004`
+
+Ingen extra `tunnel`-container eller `CLOUDFLARE_TUNNEL_TOKEN` behövs i stacken.
 
 ---
 
-## 4. Pusha koden till GitHub & starta Portainer Stack
+## 4. Portainer Stack på ZBook
 
-1. Initiera Git och pusha projektet `anna-lea` till ett nytt GitHub-repo (notera att `_arkiv/`, `.env` och `uploads/` automatiskt hoppas över via `.gitignore`).
+1. Om du startade en tillfällig `anna-lea-db` manuellt, ta bort containern först (**all data i `/home/anders/srv/anna-lea/db` ligger kvar intakt**):
+   ```bash
+   sudo docker rm -f anna-lea-db
+   ```
 2. Öppna **Portainer** på ZBook → **Stacks → Add stack**:
    - **Name:** `anna-lea`
-   - **Build method:** *Repository* (peka på ditt GitHub-repo och `docker-compose.yml`).
+   - **Build method:** *Repository* (`https://github.com/aengst/anna-lea`, branch `refs/heads/main`, fil `docker-compose.yml`).
 3. Lägg in följande **Environment variables** i Portainer:
 
-| Variabel | Exempelvärde |
+| Variabel | Värde |
 | :--- | :--- |
 | `DB_USER` | `annalea_user` |
-| `DB_PASSWORD` | *(välj ett starkt lösenord)* |
+| `DB_PASSWORD` | *(ditt lösenord från `.env`)* |
 | `DB_NAME` | `annalea_prod` |
-| `FRONTEND_URL` | `https://mina-loggar.anna-lea.se` |
-| `AUTH_REDIRECT_URI` | `https://mina-loggar.anna-lea.se/api/auth/callback` |
+| `FRONTEND_URL` | `https://anna-lea.minaloggar.se` |
+| `AUTH_REDIRECT_URI` | `https://anna-lea.minaloggar.se/api/auth/callback` |
 | `GOOGLE_CLIENT_ID` | *(från Google Cloud)* |
 | `GOOGLE_CLIENT_SECRET` | *(från Google Cloud)* |
-| `JWT_SECRET` | *(slumpad sträng, minst 48 tecken)* |
-| `INITIAL_ADMIN_EMAIL` | *(din Google-e-postadress)* |
-| `CLOUDFLARE_TUNNEL_TOKEN` | *(från Cloudflare Zero Trust)* |
+| `JWT_SECRET` | *(din slumpade nyckel från `.env`)* |
+| `INITIAL_ADMIN_EMAIL` | `aengst@gmail.com` |
 | `HOST_UPLOADS_DIR` | `/home/anders/srv/anna-lea/uploads` |
 | `HOST_DB_DIR` | `/home/anders/srv/anna-lea/db` |
 
-4. Klicka på **Deploy the stack**. Portainer bygger `Dockerfile` lokalt på ZBook och startar de tre containrarna:
+4. Klicka på **Deploy the stack**. Portainer bygger `Dockerfile` lokalt på ZBook och startar de två containrarna:
    - `anna-lea` (port `3004`)
    - `anna-lea-db` (port `5440`)
-   - `anna-lea-tunnel`
 
-Databasschemat skapas automatiskt vid första uppstarten! Verifiera genom att öppna:
-`https://mina-loggar.anna-lea.se/api/health` → ska svara `{"status":"ok","service":"anna-lea-api","db":"connected"}`.
+Verifiera genom att öppna:
+`https://anna-lea.minaloggar.se/api/health` → ska svara `{"status":"ok","service":"anna-lea-api","db":"connected"}`.
 
 ---
 

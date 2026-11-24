@@ -48,16 +48,6 @@ services:
     networks:
       - anna-lea-net
 
-  tunnel:
-    image: cloudflare/cloudflared:latest
-    container_name: anna-lea-tunnel
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run
-    environment:
-      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
-    networks:
-      - anna-lea-net
-
 networks:
   anna-lea-net:
     driver: bridge
