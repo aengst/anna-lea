@@ -3,6 +3,10 @@ import { Link, NavLink } from 'react-router-dom';
 import { Instagram, Menu, X } from 'lucide-react';
 import { useSite } from '../context/SiteContext.jsx';
 
+const APP_VERSION =
+  import.meta.env.VITE_APP_VERSION ||
+  (typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.1.0');
+
 export default function Layout({ children }) {
   const { settings } = useSite();
   const { layout, contact } = settings;
@@ -167,12 +171,15 @@ export default function Layout({ children }) {
         <div className="border-t border-black/[0.06]">
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex items-center justify-between text-xs text-brand-muted">
             <span>{contact.copyright || '© Anna-Lea AB'}</span>
-            <Link
-              to="/admin"
-              className="opacity-50 hover:opacity-100 transition-opacity tracking-wider uppercase"
-            >
-              Admin
-            </Link>
+            <div className="flex items-center gap-3">
+              <span className="opacity-40 text-[11px]">v{APP_VERSION}</span>
+              <Link
+                to="/admin"
+                className="opacity-50 hover:opacity-100 transition-opacity tracking-wider uppercase"
+              >
+                Admin
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

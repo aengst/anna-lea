@@ -20,6 +20,14 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenv.config();
 
+let APP_VERSION = '0.0.0';
+try {
+  const rootPkg = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'));
+  APP_VERSION = rootPkg.version || APP_VERSION;
+} catch {
+  // Ignorera om package.json saknas
+}
+
 const app = express();
 const PORT = Number(process.env.PORT || 3004);
 
@@ -90,13 +98,23 @@ app.use(
   })
 );
 
-// Hälsokontroll
+// Hälsokontroll (inkl. aktuell version från rotens package.json)
 app.get('/api/health', async (_req, res) => {
   try {
     await pool.query('SELECT 1');
-    return res.json({ status: 'ok', service: 'anna-lea-api', db: 'connected' });
+    return res.json({
+      status: 'ok',
+      service: 'anna-lea-api',
+      version: APP_VERSION,
+      db: 'connected',
+    });
   } catch {
-    return res.status(200).json({ status: 'degraded', service: 'anna-lea-api', db: 'disconnected' });
+    return res.status(200).json({
+      status: 'degraded',
+      service: 'anna-lea-api',
+      version: APP_VERSION,
+      db: 'disconnected',
+    });
   }
 });
 

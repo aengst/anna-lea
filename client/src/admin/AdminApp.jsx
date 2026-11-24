@@ -18,6 +18,10 @@ import PagesTab from './PagesTab.jsx';
 import AppearanceTab from './AppearanceTab.jsx';
 import UsersTab from './UsersTab.jsx';
 
+const APP_VERSION =
+  import.meta.env.VITE_APP_VERSION ||
+  (typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.1.0');
+
 const AUTH_ERROR_MESSAGES = {
   unauthorized: 'Det Google-kontot har inte administratörsbehörighet till anna-lea.com.',
   cancelled: 'Inloggningen avbröts.',
@@ -128,12 +132,15 @@ export default function AdminApp() {
             <span>Logga in med Google</span>
           </a>
 
-          <Link
-            to="/"
-            className="inline-block text-xs uppercase tracking-[0.2em] text-stone-400 hover:text-stone-800 transition-colors pt-1"
-          >
-            Tillbaka till hemsidan
-          </Link>
+          <div className="pt-1 flex flex-col items-center gap-2">
+            <Link
+              to="/"
+              className="inline-block text-xs uppercase tracking-[0.2em] text-stone-400 hover:text-stone-800 transition-colors"
+            >
+              Tillbaka till hemsidan
+            </Link>
+            <span className="text-[11px] text-stone-300 tracking-wider">v{APP_VERSION}</span>
+          </div>
         </div>
       </div>
     );
@@ -156,6 +163,9 @@ export default function AdminApp() {
           <div className="flex items-center gap-3 min-w-0">
             <img src="/favicon.png" alt="Anna-Lea" className="w-7 h-7 object-contain" />
             <span className="text-sm uppercase tracking-[0.2em] truncate">Anna-Lea Admin</span>
+            <span className="hidden sm:inline text-[11px] text-stone-400 bg-stone-100 px-2 py-0.5 rounded">
+              v{APP_VERSION}
+            </span>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-5">
