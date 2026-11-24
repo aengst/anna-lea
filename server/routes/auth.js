@@ -39,7 +39,6 @@ router.get('/google', (req, res) => {
   const client = createOAuthClient();
   const url = client.generateAuthUrl({
     access_type: 'online',
-    prompt: 'select_account',
     scope: ['profile', 'email'],
     redirect_uri: getRedirectUri(req),
   });
