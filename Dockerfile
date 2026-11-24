@@ -9,6 +9,7 @@ RUN npm ci --quiet || npm install --quiet
 
 WORKDIR /app
 COPY client ./client
+COPY docs ./docs
 
 WORKDIR /app/client
 ARG VITE_GOOGLE_CLIENT_ID

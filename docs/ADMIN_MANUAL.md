@@ -8,13 +8,14 @@ Välkommen! Denna manual beskriver steg för steg hur du hanterar smycken, konst
 
 1. Öppna **`/admin`** på webbplatsen (eller klicka på den diskreta länken **Admin** längst ned till höger i sidfoten).
 2. Klicka på **Logga in med Google** och välj ditt godkända Google-konto (Gmail).
-3. När du är inloggad ser du sex flikar högst upp:
+3. När du är inloggad ser du sju flikar högst upp:
    - **Förfrågningar**
    - **Smycken**
    - **Konst**
    - **Sidor & Kontakt**
    - **Utseende**
    - **Admins**
+   - **Manual** *(denna guide – alltid tillgänglig direkt inne i admin!)*
 
 > **Tips på mobilen:** Flikraden längst upp går att dra i sidled med fingret så att du lätt når alla delar även på en liten skärm.
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
+  BookOpen,
   ExternalLink,
   FileText,
   Gem,
@@ -17,6 +18,7 @@ import ArtTab from './ArtTab.jsx';
 import PagesTab from './PagesTab.jsx';
 import AppearanceTab from './AppearanceTab.jsx';
 import UsersTab from './UsersTab.jsx';
+import ManualTab from './ManualTab.jsx';
 
 const APP_VERSION =
   import.meta.env.VITE_APP_VERSION ||
@@ -153,6 +155,7 @@ export default function AdminApp() {
     { id: 'pages', label: 'Sidor & Kontakt', icon: FileText },
     { id: 'appearance', label: 'Utseende', icon: SlidersHorizontal },
     { id: 'users', label: 'Admins', icon: Users },
+    { id: 'manual', label: 'Manual', icon: BookOpen },
   ];
 
   return (
@@ -230,6 +233,7 @@ export default function AdminApp() {
         {activeTab === 'pages' && <PagesTab />}
         {activeTab === 'appearance' && <AppearanceTab />}
         {activeTab === 'users' && <UsersTab currentUser={user} onStatsChange={loadStats} />}
+        {activeTab === 'manual' && <ManualTab />}
       </main>
     </div>
   );

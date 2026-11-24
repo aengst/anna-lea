@@ -49,8 +49,8 @@ try {
 
   const isConventional = /^[a-z]+(\([^)]+\))?!?: /.test(title);
   const commitSubject = isConventional
-    ? `${title} (v${newVersion})`
-    : `chore(release): v${newVersion} - ${title}`;
+    ? `v${newVersion} ${title}`
+    : `v${newVersion} chore(release): ${title}`;
 
   const toStage = ['package.json'];
   if (existsSync('./package-lock.json')) toStage.push('package-lock.json');
